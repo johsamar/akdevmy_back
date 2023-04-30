@@ -11,28 +11,30 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Module {
 
 	@Id
-	private ObjectId _id;
+	private String _id;
 	private String name;
 	private String description;
-	private List<Class> classes = new ArrayList<>();
+	private List<Class> classes;
 	private ObjectId idCourse;
 	
-	public Module() {}
+	public Module() {
+		this.classes = new ArrayList<Class>();
+	}
 
-	public Module(ObjectId _id, String name, String description, List<Class> classes, ObjectId idCourse) {
+	public Module(String _id, String name, String description, List<Class> classes, ObjectId idCourse) {
 		super();
 		this._id = _id;
 		this.name = name;
 		this.description = description;
 		this.classes = classes;
-		this.idCourse = idCourse;
+		this.idCourse = idCourse;		
 	}
 
-	public ObjectId get_id() {
+	public String get_id() {
 		return _id;
 	}
 
-	public void set_id(ObjectId _id) {
+	public void set_id(String _id) {
 		this._id = _id;
 	}
 
@@ -60,8 +62,8 @@ public class Module {
 		this.classes = classes;
 	}
 
-	public ObjectId getIdCourse() {
-		return idCourse;
+	public String getIdCourse() {
+		return idCourse.toString();
 	}
 
 	public void setIdCourse(ObjectId idCourse) {

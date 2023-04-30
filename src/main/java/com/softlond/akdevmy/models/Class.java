@@ -17,7 +17,9 @@ public class Class {
 	private String document;
 	private Integer position;
 	
-	public Class() {}
+	public Class() {
+		this._id = new ObjectId();
+	}
 
 	public Class(ObjectId _id, String type, String name, String description, Integer duration, String url, String image,
 			String video, String document, Integer position) {
@@ -34,8 +36,8 @@ public class Class {
 		this.position = position;
 	}
 
-	public ObjectId get_id() {
-		return _id;
+	public String get_id() {
+		return _id.toString();
 	}
 
 	public void set_id(ObjectId _id) {
