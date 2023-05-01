@@ -27,7 +27,7 @@ public class ModuleService implements IModuleService {
 
 		return moduleSaved.flatMap(m -> {
 			if (m == null) {
-				return Mono.error(new CustomException("El módulo no pudo ser guardado", null));
+				return Mono.error(new CustomException("El módulo no pudo ser guardado", null, 400));
 			}
 
 			return response.map(r -> {

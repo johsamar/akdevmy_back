@@ -3,6 +3,7 @@ package com.softlond.akdevmy.controllers.implementations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +41,7 @@ public class ModuleController implements IModuleController {
 				CustomException exception = (CustomException) e;
 				CustomResponse<Module> response = new CustomResponse<>();
 				response.setMessage("Error al crear el módulo: " + exception.getMessage());
-				return Mono.just(new ResponseEntity<>(response, HttpStatus.BAD_REQUEST));
+				return Mono.just(new ResponseEntity<>(response, HttpStatusCode.valueOf(exception.getStatusCode())));
 			}
 
 			return Mono.just(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
