@@ -8,10 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.softlond.akdevmy.controllers.contracts.IModuleController;
 import com.softlond.akdevmy.exceptions.CustomException;
@@ -19,7 +22,6 @@ import com.softlond.akdevmy.models.Module;
 import com.softlond.akdevmy.responses.CustomResponse;
 import com.softlond.akdevmy.services.contracts.IModuleService;
 
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Controller
@@ -72,6 +74,29 @@ public class ModuleController implements IModuleController {
 				return Mono.just(new ResponseEntity<>(response, HttpStatusCode.valueOf(exception.getStatusCode())));
 			}
 
+			return Mono.just(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+
+		});
+	}
+
+	 @GetMapping("findById/{id}")
+	public Mono<ResponseEntity<CustomResponse<Module>>> findById(
+			@PathVariable String id) {
+		 
+		return this.moduleService.findById(id).map(m -> {
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-Type", "application/json; charset=UTF-8");
+
+			return new ResponseEntity<CustomResponse<Module>>(m, headers, HttpStatus.OK);
+
+		}).onErrorResume(e -> {
+			CustomResponse<Module> response = new CustomResponse<>();
+			if (e instanceof CustomException) {
+				CustomException exception = (CustomException) e;
+				response.setMessage("Error al buscar el módulo: " + exception.getMessage());
+				return Mono.just(new ResponseEntity<>(response, HttpStatusCode.valueOf(exception.getStatusCode())));
+			}		
+			
 			return Mono.just(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
 
 		});
