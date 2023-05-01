@@ -36,19 +36,22 @@ public class ModuleService implements IModuleService {
 			});
 
 		}).onErrorResume(e -> {
-			CustomException customException = new CustomException("El módulo no pudo ser guardado por un error desconocido", e, 500);
+			CustomException customException = new CustomException(
+					"El módulo no pudo ser guardado por un error desconocido", e, 500);
 
 			if (e instanceof IllegalArgumentException) {
 				// TODO: Handle error
 				/*
-				 *If necessary, you can set the message and/or the statusCode of the custom exception.
+				 * If necessary, you can set the message and/or the statusCode of the custom
+				 * exception.
 				 */
 			}
 
 			if (e instanceof OptimisticLockingFailureException) {
 				// TODO: Handle error
 				/*
-				 * If necessary, you can set the message and/or the statusCode of the custom exception.
+				 * If necessary, you can set the message and/or the statusCode of the custom
+				 * exception.
 				 */
 			}
 
@@ -63,10 +66,12 @@ public class ModuleService implements IModuleService {
 		return modules.collectList().map(moduleList -> {
 			return new CustomResponse<List<Module>>("Módulos obtenidos con éxito", moduleList);
 		}).onErrorResume(e -> {
-			CustomException customException = new CustomException("Los módulos no pudieron ser obtenidos por un error desconocido", e, 500);
+			CustomException customException = new CustomException(
+					"Los módulos no pudieron ser obtenidos por un error desconocido", e, 500);
 			/*
-			 * Here you can add validations to handle the different errors.
-			 * Also, if necessary, you can set the message and/or the statusCode of the custom exception.
+			 * Here you can add validations to handle the different errors. Also, if
+			 * necessary, you can set the message and/or the statusCode of the custom
+			 * exception.
 			 */
 
 			return Mono.error(customException);
