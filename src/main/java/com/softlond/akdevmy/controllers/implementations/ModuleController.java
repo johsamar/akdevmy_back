@@ -64,6 +64,16 @@ public class ModuleController implements IModuleController {
 			headers.add("Content-Type", "application/json; charset=UTF-8");
 
 			return new ResponseEntity<CustomResponse<List<Module>>>(m, headers, HttpStatus.OK);
+		}).onErrorResume(e -> {
+			if (e instanceof CustomException) {
+				CustomException exception = (CustomException) e;
+				CustomResponse<List<Module>> response = new CustomResponse<>();
+				response.setMessage("Error al obtener módulos: " + exception.getMessage());
+				return Mono.just(new ResponseEntity<>(response, HttpStatusCode.valueOf(exception.getStatusCode())));
+			}
+
+			return Mono.just(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+
 		});
 	}
 
