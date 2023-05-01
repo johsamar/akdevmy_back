@@ -1,5 +1,7 @@
 package com.softlond.akdevmy.services.implementations;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import com.softlond.akdevmy.repositories.contracts.IModuleReactiveRepository;
 import com.softlond.akdevmy.responses.CustomResponse;
 import com.softlond.akdevmy.services.contracts.IModuleService;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -49,9 +52,16 @@ public class ModuleService implements IModuleService {
 			if (e instanceof OptimisticLockingFailureException) {
 				// TODO: Handle error
 			}
-			
+
 			return Mono.error(e);
 		});
+	}
+
+	@Override
+	public Mono<CustomResponse<List<Module>>> getAll() {
+		Flux<Module> modules = this.moduleRepository.findAll();
+
+		return modules.collectList().map(moduleList -> new CustomResponse<>("Módulos obtenidos con éxito", moduleList));
 	}
 
 }
