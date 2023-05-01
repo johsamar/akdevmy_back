@@ -4,11 +4,15 @@ public class CustomResponse<T> {
 	private String message;
 	private T data;
 
-	public CustomResponse() {}
+	public CustomResponse() {
+		this.message = "";
+		this.data = null;
+	}
+
 	public CustomResponse(String message, T data) {
 		super();
 		this.message = message;
-		this.data = null;
+		this.data = data;
 	}
 
 	public String getMessage() {
