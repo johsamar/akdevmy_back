@@ -29,11 +29,7 @@ public class ModuleController implements IModuleController {
 	public Mono<ResponseEntity<CustomResponse<Module>>> createModule(@RequestBody Module module) {
 		Mono<CustomResponse<Module>> savedModule = this.moduleService.save(module);
 
-		return savedModule.map(m -> {
-			if (m == null) {
-				return null;
-			}
-
+		return savedModule.map(m -> {			
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Content-Type", "application/json; charset=UTF-8");
 
