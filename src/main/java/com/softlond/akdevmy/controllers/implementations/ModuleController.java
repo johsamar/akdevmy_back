@@ -80,6 +80,7 @@ public class ModuleController implements IModuleController {
 	}
 
 	 @GetMapping("findById/{id}")
+	 @Override
 	public Mono<ResponseEntity<CustomResponse<Module>>> findById(
 			@PathVariable String id) {
 		 
