@@ -30,7 +30,7 @@ public class AcademyEntity {
     private String email;
 
     @Field("social_networks")
-    private List<SocialNetwork> socialNetworks;
+    private List<SocialNetwork> social_networks;
 
     private String imageUrl;
 

@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
+
 public class SocialNetwork {
 
     private String type;

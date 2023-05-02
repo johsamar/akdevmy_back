@@ -1,6 +1,5 @@
 package com.softlond.akdevmy.services.implementations;
 import com.softlond.akdevmy.models.AcademyEntity;
-import com.softlond.akdevmy.models.SocialNetwork;
 import com.softlond.akdevmy.repositories.contracts.AcademyRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,6 @@ public class AcademyService {
         return null;
     }
 
-
     /** Metodo de apoyo para modificar la academia. recibe de parametro la academia existente en la bdd y la peticion tipo json
      * con la informacion modificada*/
     private AcademyEntity modifiedAcademy(AcademyEntity existingAcademy, AcademyEntity updatedAcademy){
@@ -46,22 +44,14 @@ public class AcademyService {
         existingAcademy.setNit(updatedAcademy.getNit());
         existingAcademy.setTelephone(updatedAcademy.getTelephone());
         existingAcademy.setEmail(updatedAcademy.getEmail());
-//        updatedSocialNetworks(existingAcademy,updatedAcademy);
+        updatedSocialNetworks(existingAcademy,updatedAcademy);
         existingAcademy.setImageUrl(updatedAcademy.getImageUrl());
         return academyRepository.save(existingAcademy);
     }
 
-    // TODO: 02/05/2023  Hacer Funcionalidad para modificar la lista que contiene los tipos e informacion de las redes sociales, Corregir la excepcion nullPointer exception
-
-//    private void updatedSocialNetworks(AcademyEntity existingAcademy, AcademyEntity updatedAcademy){
-//        List<SocialNetwork> currentSocialNetworkList = new ArrayList<>(existingAcademy.getSocialNetworks());
-//        List<SocialNetwork> socialNetworkListToUpdate = new ArrayList<>(updatedAcademy.getSocialNetworks());
-//
-//        List<SocialNetwork> socialNetworksListFinal = new ArrayList<>(currentSocialNetworkList);
-//        socialNetworksListFinal.addAll(socialNetworkListToUpdate);
-//        Set<SocialNetwork> set = new HashSet<>(socialNetworksListFinal);
-//        socialNetworksListFinal.clear();
-//        socialNetworksListFinal.addAll(set);
-//    }
-
+    /**Metodo de apoyo actualiza las redes sociales */
+    private void updatedSocialNetworks(AcademyEntity existingAcademy, AcademyEntity updatedAcademy){
+        existingAcademy.getSocial_networks().clear();
+        existingAcademy.setSocial_networks(updatedAcademy.getSocial_networks());
+    }
 }

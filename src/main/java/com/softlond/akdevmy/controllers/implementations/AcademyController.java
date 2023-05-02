@@ -2,10 +2,10 @@ package com.softlond.akdevmy.controllers.implementations;
 
 import com.softlond.akdevmy.models.AcademyEntity;
 import com.softlond.akdevmy.services.implementations.AcademyService;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,14 +20,14 @@ public class AcademyController {
     }
 
     @GetMapping("/{id}")
-    public AcademyEntity getAcademyInfo(@PathVariable("id") String id) {
-        return academyService.getAcademyById(id);
+    public ResponseEntity<AcademyEntity> getAcademyInfo(@PathVariable("id") String id) {
+        return ResponseEntity.ok(academyService.getAcademyById(id));
 
     }
 
     @PostMapping("/{id}/editar_perfil")
-    public AcademyEntity SetAcademyInfo(@PathVariable("id") String id, @RequestBody AcademyEntity academyToUpdate) {
-        return academyService.updateAcademy(id, academyToUpdate);
+    public ResponseEntity<AcademyEntity> SetAcademyInfo(@PathVariable("id") String id, @RequestBody AcademyEntity academyToUpdate) {
+        return ResponseEntity.ok(academyService.updateAcademy(id, academyToUpdate));
     }
 
 }
