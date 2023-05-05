@@ -41,7 +41,7 @@ public class CourseController {
 
 
 
-    @PostMapping("/createCuorse")
+    @PostMapping("/createCourse")
     public Mono<ResponseEntity<CustomResponse<Course>>> createCourse(@RequestBody Course course){
 
        return courseService.createCourse(course).map(c -> ResponseEntity.ok()
@@ -61,7 +61,7 @@ public class CourseController {
 
 
     //List all
-    @GetMapping("/listCuorses")
+    @GetMapping("/listCourses")
     public Flux<Course> listCuorses(){
 
         return courseService.findAll();
