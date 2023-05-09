@@ -45,6 +45,15 @@ public class CourseImplementService implements CourseService {
     }
 
     @Override
+    public Mono<Course> updateCourse(Course course, String id){
+        return courseRepository.findById(id)
+                .flatMap(contactoActualizado -> {
+                    course.setId(id);
+                    return courseRepository.save(course);
+                }).switchIfEmpty(Mono.error(new Exception("Curso no encontrado")));
+    }
+
+    @Override
     public Flux<Course> searchCoursesByName(String name) {
 
         Query query = new Query();
