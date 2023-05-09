@@ -60,6 +60,24 @@ public class CourseController {
 
     }
 
+    @PutMapping("/updateCourse/{id}")
+    public Mono<ResponseEntity<CustomResponse<Course>>> updateCourse(@RequestBody Course course,@PathVariable String id){
+
+        return courseService.updateCourse(course,id).map(c -> ResponseEntity.ok()
+                        .header("Content-Type", "application/json; charset=UTF-8")
+                        .body(new CustomResponse<>("Ok: ",c)))
+                .onErrorResume(err -> {
+                    CustomResponse<Course> resp = new CustomResponse<>();
+                    if (err instanceof CustomException) {
+                        CustomException customException = (CustomException) err;
+                        resp.setMessage("Error: " + customException.getMessage());
+                        return Mono.just(new ResponseEntity<>(resp, HttpStatusCode.valueOf(customException.getStatusCode())));
+                    }
+                    return Mono.just(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+                });
+
+    }
+
 
     //List all
     @GetMapping("/listCourses")
