@@ -15,5 +15,5 @@ public interface IModuleController {
 	public Mono<ResponseEntity<CustomResponse<Module>>> createModule(Module module);
 	public Mono<ResponseEntity<CustomResponse<List<Module>>>> getAll();
 	public Mono<ResponseEntity<CustomResponse<Module>>> findById(String id);
-	public Mono<ResponseEntity<CustomResponse<Boolean>>> deletById(@PathVariable String id);
+	public Mono<ResponseEntity<CustomResponse<Boolean>>> deletById(String id);
 }
