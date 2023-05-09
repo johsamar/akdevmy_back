@@ -54,6 +54,11 @@ public class CourseImplementService implements CourseService {
     }
 
     @Override
+    public Mono<Void> deleteCourse(String id){
+        return  courseRepository.deleteById(id);
+    }
+
+    @Override
     public Flux<Course> searchCoursesByName(String name) {
 
         Query query = new Query();
