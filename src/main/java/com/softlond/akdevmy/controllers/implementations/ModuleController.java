@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,12 +27,14 @@ import com.softlond.akdevmy.services.contracts.IModuleService;
 import reactor.core.publisher.Mono;
 
 @Controller
+@CrossOrigin(origins = "*")
 @RequestMapping("/modules")
 public class ModuleController implements IModuleController {
 
 	@Autowired
 	protected IModuleService moduleService;
 
+	@CrossOrigin(origins = "*")
 	@PostMapping("")
 	@Override
 	public Mono<ResponseEntity<CustomResponse<Module>>> createModule(@RequestBody Module module) {
@@ -56,6 +59,7 @@ public class ModuleController implements IModuleController {
 		});
 	}
 
+	@CrossOrigin(origins = "*")
 	@GetMapping("")
 	@Override
 	public Mono<ResponseEntity<CustomResponse<List<Module>>>> getAll() {
@@ -80,6 +84,7 @@ public class ModuleController implements IModuleController {
 		});
 	}
 
+	@CrossOrigin(origins = "*")
 	@GetMapping("findById/{id}")
 	@Override
 	public Mono<ResponseEntity<CustomResponse<Module>>> findById(@PathVariable String id) {
@@ -104,6 +109,7 @@ public class ModuleController implements IModuleController {
 		});
 	}
 
+	@CrossOrigin(origins = "*")
 	@DeleteMapping("deleteById/{id}")
 	@Override
 	public Mono<ResponseEntity<CustomResponse<Boolean>>> deletById(@PathVariable String id) {
