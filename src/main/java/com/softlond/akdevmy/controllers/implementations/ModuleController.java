@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -79,11 +80,10 @@ public class ModuleController implements IModuleController {
 		});
 	}
 
-	 @GetMapping("findById/{id}")
-	 @Override
-	public Mono<ResponseEntity<CustomResponse<Module>>> findById(
-			@PathVariable String id) {
-		 
+	@GetMapping("findById/{id}")
+	@Override
+	public Mono<ResponseEntity<CustomResponse<Module>>> findById(@PathVariable String id) {
+
 		return this.moduleService.findById(id).map(m -> {
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Content-Type", "application/json; charset=UTF-8");
@@ -91,16 +91,38 @@ public class ModuleController implements IModuleController {
 			return new ResponseEntity<CustomResponse<Module>>(m, headers, HttpStatus.OK);
 
 		}).onErrorResume(e -> {
+			System.out.println("Entró a l error");
 			CustomResponse<Module> response = new CustomResponse<>();
 			if (e instanceof CustomException) {
 				CustomException exception = (CustomException) e;
 				response.setMessage("Error al buscar el módulo: " + exception.getMessage());
 				return Mono.just(new ResponseEntity<>(response, HttpStatusCode.valueOf(exception.getStatusCode())));
-			}		
-			
+			}
+
 			return Mono.just(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
 
 		});
+	}
+
+	@DeleteMapping("deleteById/{id}")
+	@Override
+	public Mono<ResponseEntity<CustomResponse<Boolean>>> deletById(@PathVariable String id) {
+
+		return this.moduleService.deleteById(id)
+				.map(r -> ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8")
+						.body(new CustomResponse<Boolean>(r.getMessage(), r.getData())))
+				.onErrorResume(e -> {
+					CustomResponse<Boolean> response = new CustomResponse<>();
+					if (e instanceof CustomException) {
+						CustomException exception = (CustomException) e;
+						response.setMessage("Error al buscar el módulo: " + exception.getMessage());
+						return Mono.just(
+								new ResponseEntity<>(response, HttpStatusCode.valueOf(exception.getStatusCode())));
+					}
+
+					return Mono.just(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+
+				});
 	}
 
 }

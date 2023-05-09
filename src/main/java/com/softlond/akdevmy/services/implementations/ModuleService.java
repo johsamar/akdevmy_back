@@ -83,32 +83,65 @@ public class ModuleService implements IModuleService {
 	public Mono<CustomResponse<Module>> findById(String id) {
 		Mono<CustomResponse<Module>> response = Mono.just(new CustomResponse<Module>());
 
-		return this.moduleRepository.findById(id).flatMap(m -> {
-			return response.map(r -> {
-				r.setMessage("Módulo encontrado con éxito");
-				r.setData(m);
-				return r;
-			});
+		return this.moduleRepository.findById(id)
+
+				.flatMap(m -> {
+					return response.map(r -> {
+						r.setMessage("Módulo encontrado con éxito");
+						r.setData(m);
+						return r;
+					});
+				}).onErrorResume(e -> {
+					CustomException customException = new CustomException(
+							"El modulo no pudo ser obtenido por un error desconocido", e, 500);
+					if (e instanceof IllegalArgumentException) {
+						/*
+						 * TODO: Fix logic to catch IllegalArgumentException type error that returns
+						 * IllegalArgumentException if id is null. Then remove the validation from the
+						 * controller.
+						 */
+						customException = new CustomException("El id del modulo fue recibido como null", e, 400);
+					}
+
+					return Mono.error(customException);
+				}).switchIfEmpty(response.map(r -> {
+					r.setMessage("El módulo con el id indicado no existe");
+					r.setData(null);
+					return r;
+				})
+
+				);
+
+	}
+
+	@Override
+	public Mono<CustomResponse<Boolean>> deleteById(String id) {
+
+		return this.moduleRepository.existsById(id).flatMap(exists -> {
+			CustomException customException = new CustomException("El módulo con el id indicado no existe", null);
+			if (!exists) {
+				return Mono.error(customException);
+			}
+			return this.moduleRepository.deleteById(id).then(Mono.just(true));
+
+		}).flatMap(deleted -> {
+			CustomResponse<Boolean> response = new CustomResponse<>();
+			response.setData(deleted);
+			response.setMessage("Módulo eliminado con éxito");
+			return Mono.just(response);
 		}).onErrorResume(e -> {
 			CustomException customException = new CustomException(
-					"El modulo no pudo ser obtenido por un error desconocido", e, 500);
-			if (e instanceof IllegalArgumentException) {
-				/*
-				 * TODO: Fix logic to catch IllegalArgumentException type error that returns
-				 * IllegalArgumentException if id is null. Then remove the validation from the
-				 * controller.
-				 */
-				customException = new CustomException("El id del module fue recibido como null", e, 400);
+					"El módulo no pudo ser eliminado por un error desconocido", e, 500);
+
+			if (e instanceof CustomException) {
+				customException = new CustomException(e.getMessage(), e, 400);
 			}
 
+			if (e instanceof IllegalArgumentException) {
+				customException = new CustomException("El id del modulo fue recibido como null", e, 400);
+			}
 			return Mono.error(customException);
-		}).switchIfEmpty(response.map(r -> {
-			r.setMessage("El módulo con el id indicado no existe");
-			r.setData(null);
-			return r;
-		})
-
-		);
+		});
 	}
 
 }

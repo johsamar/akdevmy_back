@@ -12,4 +12,5 @@ public interface IModuleService {
 	public Mono<CustomResponse<Module>> save(Module module);
 	public Mono<CustomResponse<List<Module>>> getAll();
 	public Mono<CustomResponse<Module>> findById(String id);
+	public Mono<CustomResponse<Boolean>> deleteById(String id);
 }
