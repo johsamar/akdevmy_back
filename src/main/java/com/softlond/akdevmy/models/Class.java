@@ -14,6 +14,8 @@ public class Class {
 	private String url;
 	private String image;
 	private String video;
+	private String audio;
+	private String article;
 	private String document;
 	private Integer position;
 	
@@ -22,7 +24,7 @@ public class Class {
 	}
 
 	public Class(ObjectId _id, String type, String name, String description, Integer duration, String url, String image,
-			String video, String document, Integer position) {
+			String video, String document, Integer position, String audio, String article) {
 		super();
 		this._id = _id;
 		this.type = type;
@@ -34,6 +36,8 @@ public class Class {
 		this.video = video;
 		this.document = document;
 		this.position = position;
+		this.audio = audio;
+		this.article = article;
 	}
 
 	public String get_id() {
@@ -115,5 +119,21 @@ public class Class {
 	public void setPosition(Integer position) {
 		this.position = position;
 	}
+
+	public String getAudio() {
+		return audio;
+	}
+
+	public void setAudio(String audio) {
+		this.audio = audio;
+	}
+
+	public String getArticle() {
+		return article;
+	}
+
+	public void setArticle(String article) {
+		this.article = article;
+	}	
 
 }

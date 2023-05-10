@@ -13,7 +13,7 @@ public class Module {
 	@Id
 	private String _id;
 	private String name;
-	private String description;
+	private String description;	
 	private List<Class> classes;
 	private ObjectId idCourse;
 	
