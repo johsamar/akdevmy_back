@@ -14,5 +14,6 @@ public interface IModuleService {
 	public Mono<CustomResponse<List<Module>>> getAll();
 	public Mono<CustomResponse<Module>> findById(String id);
 	public Mono<CustomResponse<Boolean>> deleteById(String id);
-	public Mono<CustomResponse<Module>> addClass(String moduleId, Class theClass);	
+	public Mono<CustomResponse<Module>> addClass(String moduleId, Class theClass);
+	public Mono<CustomResponse<Boolean>> deleteClass(String moduleId, String classId);
 }

@@ -17,5 +17,6 @@ public interface IModuleController {
 	public Mono<ResponseEntity<CustomResponse<List<Module>>>> getAll();
 	public Mono<ResponseEntity<CustomResponse<Module>>> findById(String id);
 	public Mono<ResponseEntity<CustomResponse<Boolean>>> deletById(String id);
-	Mono<ResponseEntity<CustomResponse<Module>>> addClass(String moduleId, Class theClass);
+	public Mono<ResponseEntity<CustomResponse<Module>>> addClass(String moduleId, Class theClass);
+	public Mono<ResponseEntity<CustomResponse<Boolean>>> deleteClass(String moduleId, String classId);
 }
