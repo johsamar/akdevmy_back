@@ -1,5 +1,6 @@
 package com.softlond.akdevmy.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.softlond.akdevmy.exceptions.CustomException;
+import com.softlond.akdevmy.models.Class;
 import com.softlond.akdevmy.models.Module;
 import com.softlond.akdevmy.repositories.contracts.IModuleReactiveRepository;
 import com.softlond.akdevmy.responses.CustomResponse;
@@ -143,5 +145,37 @@ public class ModuleService implements IModuleService {
 			return Mono.error(customException);
 		});
 	}
+	
+	@Override
+	public Mono<CustomResponse<Module>> addClass(String moduleId, Class theClass) {
+	    return this.moduleRepository.findById(moduleId)
+	            .flatMap(m -> {
+	                List<Class> classes = m.getClasses();
+	                classes.add(theClass);
+	                m.setClasses(classes);
+	                return this.moduleRepository.save(m);
+	            })
+	            .map(updatedModule -> {
+	                CustomResponse<Module> response = new CustomResponse<>();
+	                response.setData(updatedModule);
+	                response.setMessage("Clase añadida con éxito");
+	                return response;
+	            })
+	            .switchIfEmpty(Mono.error(new CustomException("No se encontró el módulo con el ID proporcionado", null)))
+	            .onErrorResume(e -> {
+	    			CustomException customException = new CustomException(
+	    					"La clase no puedo ser añadida al módulo por un error desconocido", e, 500);
+
+	    			if (e instanceof CustomException) {
+	    				customException = new CustomException(e.getMessage(), e, 400);
+	    			}
+
+	    			if (e instanceof IllegalArgumentException) {
+	    				customException = new CustomException("El id del modulo fue recibido como null", e, 400);
+	    			}
+	    			return Mono.error(customException);
+	    		});
+	}
+
 
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.softlond.akdevmy.controllers.contracts.IModuleController;
 import com.softlond.akdevmy.exceptions.CustomException;
+import com.softlond.akdevmy.models.Class;
 import com.softlond.akdevmy.models.Module;
 import com.softlond.akdevmy.responses.CustomResponse;
 import com.softlond.akdevmy.services.contracts.IModuleService;
@@ -119,6 +120,28 @@ public class ModuleController implements IModuleController {
 						.body(new CustomResponse<Boolean>(r.getMessage(), r.getData())))
 				.onErrorResume(e -> {
 					CustomResponse<Boolean> response = new CustomResponse<>();
+					if (e instanceof CustomException) {
+						CustomException exception = (CustomException) e;
+						response.setMessage("Error al buscar el módulo: " + exception.getMessage());
+						return Mono.just(
+								new ResponseEntity<>(response, HttpStatusCode.valueOf(exception.getStatusCode())));
+					}
+
+					return Mono.just(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+
+				});
+	}
+
+	@CrossOrigin(origins = "*")
+	@PostMapping("{moduleId}/class")
+	@Override
+	public Mono<ResponseEntity<CustomResponse<Module>>> addClass(@PathVariable String moduleId,
+			@RequestBody Class theClass) {
+		return this.moduleService.addClass(moduleId, theClass)
+				.map(r -> ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8")
+						.body(new CustomResponse<Module>(r.getMessage(), r.getData())))
+				.onErrorResume(e -> {
+					CustomResponse<Module> response = new CustomResponse<>();
 					if (e instanceof CustomException) {
 						CustomException exception = (CustomException) e;
 						response.setMessage("Error al buscar el módulo: " + exception.getMessage());
