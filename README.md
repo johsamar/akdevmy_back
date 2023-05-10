@@ -4,7 +4,7 @@
 
 Verb: POST
 
-Endpoint → http://localhost:8081/api/modules
+Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules
 
 Request example:
 
@@ -57,7 +57,7 @@ Request example:
 }
 ```
 
-Response example:
+Response example. Status 200:
 
 
 ```
@@ -121,9 +121,9 @@ Response example:
 
 Verb: GET
 
-Endpoint → http://localhost:8081/api/modules
+Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules
 
-Response example:
+Response example. Status 200:
 
 
 ```
@@ -395,11 +395,11 @@ Response example:
 
 Verb: GET
 
-Endpoint → http://localhost:8081/api/modules/findById/{id}
+Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules/findById/{id}
 
-Request example: http://localhost:8081/api/modules/findById/644fb84827d2cd43116e6467
+Request example: akdevmybacktest-gierestrepove.b4a.run/api/modules/findById/644fb84827d2cd43116e6467
 
-Successful response example:
+Successful response example. Status 200: 
 
 
 ```
@@ -458,7 +458,7 @@ Successful response example:
 }
 ```
 
-Example of response when no module is found :
+Example of response when no module is found. Status 400:
 
 ``` 
 {
@@ -471,11 +471,11 @@ Example of response when no module is found :
 
 Verb: DELETE
 
-Endpoint → http://localhost:8081/api/modules/deleteById/{id}
+Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules/deleteById/{id}
 
-Request example: http://localhost:8081/api/modules/deleteById/644fb84827d2cd43116e6467
+Request example: akdevmybacktest-gierestrepove.b4a.run/api/modules/deleteById/644fb84827d2cd43116e6467
 
-Successful response example:
+Successful response example.Status 200:
 
 
 ```
@@ -485,7 +485,7 @@ Successful response example:
 }
 ```
 
-Example of response when no module is found :
+Example of response when no module is found. Status 400:
 
 ``` 
 {
@@ -498,9 +498,9 @@ Example of response when no module is found :
 
 Verb: POST
 
-Endpoint → http://localhost:8081/api/modules/{moduleId}/class
+Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules/{moduleId}/class
 
-Request example: http://localhost:8081/api/modules/644f0abd6e9d54379b4e91ff/class
+Request example: akdevmybacktest-gierestrepove.b4a.run/api/modules/644f0abd6e9d54379b4e91ff/class
 
 ```
 	{
@@ -518,7 +518,7 @@ Request example: http://localhost:8081/api/modules/644f0abd6e9d54379b4e91ff/clas
 		}
 ```
 
-Successful response example:
+Successful response example.Status 200:
 
 
 ```
@@ -606,11 +606,41 @@ Successful response example:
 ```
 
 
-Example of response when no module is found :
+Example of response when no module is found. Status 400:
 
 ```
 {
 	"message": "Error al buscar el módulo: No se encontró el módulo con el ID proporcionado",
+	"data": null
+}
+```
+
+
+
+**Delete class**
+
+Verb: DELETE
+
+Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules/{moduleId}/class/{classId}
+
+Request example: akdevmybacktest-gierestrepove.b4a.run/api/modules/645bc67a7da47f419bb8331e/class/645bc67a7da47f419bb8331d
+
+Successful response example.Status 200:
+
+
+```
+{
+	"message": "Clase eliminada exitosamente",
+	"data": true
+}
+```
+
+
+Example of response when no class of the specified module is found. Status 400 :
+
+```
+{
+	"message": "Error al eliminar la clase: La clase no se encontró en el módulo especificado",
 	"data": null
 }
 ```

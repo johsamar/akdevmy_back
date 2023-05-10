@@ -144,7 +144,30 @@ public class ModuleController implements IModuleController {
 					CustomResponse<Module> response = new CustomResponse<>();
 					if (e instanceof CustomException) {
 						CustomException exception = (CustomException) e;
-						response.setMessage("Error al buscar el módulo: " + exception.getMessage());
+						response.setMessage("Error al añadir la clase: " + exception.getMessage());
+						return Mono.just(
+								new ResponseEntity<>(response, HttpStatusCode.valueOf(exception.getStatusCode())));
+					}
+
+					return Mono.just(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+
+				});
+	}
+
+	@CrossOrigin(origins = "*")
+	@DeleteMapping("{moduleId}/class/{classId}")
+	@Override
+	public Mono<ResponseEntity<CustomResponse<Boolean>>> deleteClass(@PathVariable String moduleId,
+			@PathVariable String classId) {
+
+		return this.moduleService.deleteClass(moduleId, classId)
+				.map(r -> ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8")
+						.body(new CustomResponse<Boolean>(r.getMessage(), r.getData())))
+				.onErrorResume(e -> {
+					CustomResponse<Boolean> response = new CustomResponse<>();
+					if (e instanceof CustomException) {
+						CustomException exception = (CustomException) e;
+						response.setMessage("Error al eliminar la clase: " + exception.getMessage());
 						return Mono.just(
 								new ResponseEntity<>(response, HttpStatusCode.valueOf(exception.getStatusCode())));
 					}
