@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.softlond.akdevmy.dtos.ModuleUpdateDto;
 import com.softlond.akdevmy.exceptions.CustomException;
 import com.softlond.akdevmy.models.Class;
 import com.softlond.akdevmy.models.Module;
@@ -93,9 +94,16 @@ public class ModuleService implements IModuleService {
 						r.setData(m);
 						return r;
 					});
-				}).onErrorResume(e -> {
+				}).switchIfEmpty(Mono.error(new CustomException("El módulo con el id indicado no existe", null, 400))
+
+				).onErrorResume(e -> {
 					CustomException customException = new CustomException(
 							"El modulo no pudo ser obtenido por un error desconocido", e, 500);
+
+					if (e instanceof CustomException) {
+						return Mono.error(e);
+					}
+
 					if (e instanceof IllegalArgumentException) {
 						/*
 						 * TODO: Fix logic to catch IllegalArgumentException type error that returns
@@ -106,13 +114,7 @@ public class ModuleService implements IModuleService {
 					}
 
 					return Mono.error(customException);
-				}).switchIfEmpty(response.map(r -> {
-					r.setMessage("El módulo con el id indicado no existe");
-					r.setData(null);
-					return r;
-				})
-
-				);
+				});
 
 	}
 
@@ -182,20 +184,46 @@ public class ModuleService implements IModuleService {
 					? this.moduleRepository.save(module)
 							.thenReturn(new CustomResponse<Boolean>("Clase eliminada exitosamente", true))
 					: Mono.error(new CustomException("La clase no se encontró en el módulo especificado", null));
-		}).switchIfEmpty(Mono.just(new CustomResponse<Boolean>("El módulo especificado no existe", false)))
-				.onErrorResume(e -> {
-					CustomException customException = new CustomException(
-							"La clase no pudo ser eliminada por un error desconocido", e, 500);
+		}).switchIfEmpty(Mono.error(new CustomException("El módulo especificado no existe", null))).onErrorResume(e -> {
+			CustomException customException = new CustomException(
+					"La clase no pudo ser eliminada por un error desconocido", e, 500);
 
-					if (e instanceof CustomException) {
-						customException = new CustomException(e.getMessage(), e, 400);
-					}
+			if (e instanceof CustomException) {
+				customException = new CustomException(e.getMessage(), e, 400);
+			}
 
-					if (e instanceof IllegalArgumentException) {
-						customException = new CustomException("El id del modulo fue recibido como null", e, 400);
-					}
-					return Mono.error(customException);
-				});
+			if (e instanceof IllegalArgumentException) {
+				customException = new CustomException("El id del modulo fue recibido como null", e, 400);
+			}
+			return Mono.error(customException);
+		});
+	}
+
+	@Override
+	public Mono<CustomResponse<ModuleUpdateDto>> updateModule(String moduleId, ModuleUpdateDto moduleUpdateDto) {
+
+		return this.moduleRepository.findById(moduleId).flatMap(m -> {
+			m.setName(moduleUpdateDto.getName());
+			m.setDescription(moduleUpdateDto.getDescription());
+
+			return this.moduleRepository.save(m).map(ms -> {
+				ModuleUpdateDto moduleUpdated = new ModuleUpdateDto(ms.getName(), ms.getDescription());
+				return new CustomResponse<ModuleUpdateDto>("Módulo actualizado exitosamente", moduleUpdated);
+			});
+		}).switchIfEmpty(Mono.error(new CustomException("El módulo no existe", null))).onErrorResume(e -> {
+			CustomException customException = new CustomException(
+					"El módulo no pudo ser actualizado por un error desconocido", e, 500);
+
+			if (e instanceof CustomException) {
+				customException = new CustomException(e.getMessage(), e, 400);
+			}
+
+			if (e instanceof IllegalArgumentException) {
+				customException = new CustomException("El id del modulo fue recibido como null", e, 400);
+			}
+			return Mono.error(customException);
+		});
+
 	}
 
 }
