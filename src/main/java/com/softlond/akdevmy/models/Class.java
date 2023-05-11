@@ -2,7 +2,6 @@ package com.softlond.akdevmy.models;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 
 public class Class {
 	@Id

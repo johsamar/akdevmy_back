@@ -3,7 +3,6 @@ package com.softlond.akdevmy.controllers.contracts;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.softlond.akdevmy.dtos.ModuleUpdateDto;
 import com.softlond.akdevmy.models.Class;

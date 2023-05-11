@@ -2,9 +2,6 @@ package com.softlond.akdevmy.services.contracts;
 
 import java.util.List;
 
-import org.bson.types.ObjectId;
-import org.springframework.http.ResponseEntity;
-
 import com.softlond.akdevmy.dtos.ModuleUpdateDto;
 import com.softlond.akdevmy.models.Class;
 import com.softlond.akdevmy.models.Module;

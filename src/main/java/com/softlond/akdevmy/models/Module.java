@@ -7,14 +7,11 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import jakarta.validation.constraints.NotBlank;
-
 @Document(collection = "Modules")
 public class Module {
 
 	@Id
 	private String _id;
-	@NotBlank(message = "name is required")
 	private String name;
 	private String description;	
 	private List<Class> classes;
