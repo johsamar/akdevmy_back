@@ -644,3 +644,57 @@ Example of response when no class of the specified module is found. Status 400 :
 	"data": null
 }
 ```
+
+
+
+**Update a module **
+
+Verb: PATCH
+
+Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules/{moduleId}
+
+Request example: akdevmybacktest-gierestrepove.b4a.run/api/modules/644f0abd6e9d54379b4e91ff
+
+```
+{
+	"name": "Módulo 222222222",
+	"description": "Descripción módulo 22222222"
+}
+
+```
+
+Successful response example.Status 200:
+
+
+```
+{
+	"message": "Módulo actualizado exitosamente",
+	"data": {
+		"name": "Módulo 222222222",
+		"description": "Descripción módulo 22222222"
+	}
+}
+```
+
+Example of response when no module is found. Status 400:
+
+``` 
+{
+	"message": "Error al actualizar el módulo: El módulo no existe",
+	"data": null
+}
+
+```
+
+Example of response when required data is not sent in body request(name and description). Status 400:
+
+``` 
+{
+	"message": "El cuerpo de la petición no es válido",
+	"data": {
+		"name": "required",
+		"description": "required"
+	}
+}
+
+```
