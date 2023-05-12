@@ -4,7 +4,7 @@
 
 Verb: POST
 
-Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules
+Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules/create
 
 Request example:
 
@@ -117,11 +117,11 @@ Response example. Status 200:
 ```
 
 
-**Get modules**
+**List modules**
 
 Verb: GET
 
-Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules
+Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules/list
 
 Response example. Status 200:
 
@@ -471,7 +471,7 @@ Example of response when no module is found. Status 400:
 
 Verb: DELETE
 
-Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules/deleteById/{id}
+Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules/delete/{id}
 
 Request example: akdevmybacktest-gierestrepove.b4a.run/api/modules/deleteById/644fb84827d2cd43116e6467
 
@@ -651,9 +651,9 @@ Example of response when no class of the specified module is found. Status 400 :
 
 Verb: PATCH
 
-Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules/{moduleId}
+Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules/update/{moduleId}
 
-Request example: akdevmybacktest-gierestrepove.b4a.run/api/modules/644f0abd6e9d54379b4e91ff
+Request example: akdevmybacktest-gierestrepove.b4a.run/api/modules/update/644f0abd6e9d54379b4e91ff
 
 ```
 {

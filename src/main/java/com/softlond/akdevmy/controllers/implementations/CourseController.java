@@ -23,7 +23,7 @@ public class CourseController {
     private CourseService courseService;
 
 
-    @GetMapping(value = ApiConstant.FIND, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = ApiConstant.FIND_BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<CustomResponse<Course>>> findById(@PathVariable String id) {
 
         return  courseService.findById(id).map(c -> ResponseEntity.ok()

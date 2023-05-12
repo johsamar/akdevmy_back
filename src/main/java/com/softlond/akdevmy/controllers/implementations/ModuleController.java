@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.softlond.akdevmy.constant.ApiConstant;
 import com.softlond.akdevmy.controllers.contracts.IModuleController;
 import com.softlond.akdevmy.dtos.ModuleUpdateDto;
 import com.softlond.akdevmy.exceptions.CustomException;
@@ -29,15 +32,14 @@ import jakarta.validation.Valid;
 import reactor.core.publisher.Mono;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST, RequestMethod.PUT,RequestMethod.DELETE})
 @RequestMapping("/modules")
 public class ModuleController implements IModuleController {
 
 	@Autowired
 	protected IModuleService moduleService;
 
-	@CrossOrigin(origins = "*")
-	@PostMapping("")
+	@PostMapping(value = ApiConstant.CREATE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public Mono<ResponseEntity<CustomResponse<Module>>> createModule(@Valid @RequestBody Module module) {
 		Mono<CustomResponse<Module>> savedModule = this.moduleService.save(module);
@@ -61,8 +63,7 @@ public class ModuleController implements IModuleController {
 		});
 	}
 
-	@CrossOrigin(origins = "*")
-	@GetMapping("")
+	@GetMapping(value = ApiConstant.LIST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public Mono<ResponseEntity<CustomResponse<List<Module>>>> getAll() {
 		Mono<CustomResponse<List<Module>>> allModules = this.moduleService.getAll();
@@ -86,8 +87,7 @@ public class ModuleController implements IModuleController {
 		});
 	}
 
-	@CrossOrigin(origins = "*")
-	@GetMapping("findById/{id}")
+	@GetMapping(value = ApiConstant.FIND_BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public Mono<ResponseEntity<CustomResponse<Module>>> findById(@PathVariable String id) {
 
@@ -111,8 +111,7 @@ public class ModuleController implements IModuleController {
 		});
 	}
 
-	@CrossOrigin(origins = "*")
-	@DeleteMapping("deleteById/{id}")
+	@DeleteMapping(value = ApiConstant.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public Mono<ResponseEntity<CustomResponse<Boolean>>> deletById(@PathVariable String id) {
 
@@ -133,8 +132,7 @@ public class ModuleController implements IModuleController {
 				});
 	}
 
-	@CrossOrigin(origins = "*")
-	@PostMapping("{moduleId}/class")
+	@PostMapping(value = ApiConstant.ADD_CLASS, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public Mono<ResponseEntity<CustomResponse<Module>>> addClass(@PathVariable String moduleId,
 			@RequestBody Class theClass) {
@@ -155,8 +153,7 @@ public class ModuleController implements IModuleController {
 				});
 	}
 
-	@CrossOrigin(origins = "*")
-	@DeleteMapping("{moduleId}/class/{classId}")
+	@DeleteMapping(value = ApiConstant.DELETE_CLASS, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
 	public Mono<ResponseEntity<CustomResponse<Boolean>>> deleteClass(@PathVariable String moduleId,
 			@PathVariable String classId) {
@@ -178,13 +175,12 @@ public class ModuleController implements IModuleController {
 				});
 	}
 
-	@CrossOrigin(origins = "*")
-	@PatchMapping("{moduleId}")
+	@PatchMapping(value = ApiConstant.UPDATE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Override
-	public Mono<ResponseEntity<CustomResponse<ModuleUpdateDto>>> updateModule(@PathVariable String moduleId,
+	public Mono<ResponseEntity<CustomResponse<ModuleUpdateDto>>> updateModule(@PathVariable String id,
 			@Valid @RequestBody ModuleUpdateDto moduleUpdateDto) {
 
-		return this.moduleService.updateModule(moduleId, moduleUpdateDto)
+		return this.moduleService.updateModule(id, moduleUpdateDto)
 				.map(r -> ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8")
 						.body(new CustomResponse<ModuleUpdateDto>(r.getMessage(), r.getData())))
 				.onErrorResume(e -> {
