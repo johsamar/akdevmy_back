@@ -15,4 +15,5 @@ public final class ApiConstant {
     //Modules
     public static final String ADD_CLASS = "/{moduleId}/class";
     public static final String DELETE_CLASS = "/{moduleId}/class/{classId}";
+    public static final String UPDATE_CLASS = "/{moduleId}/class/{classId}";
 }

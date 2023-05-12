@@ -20,4 +20,5 @@ public interface IModuleController {
 	public Mono<ResponseEntity<CustomResponse<Module>>> addClass(String moduleId, Class theClass);
 	public Mono<ResponseEntity<CustomResponse<Boolean>>> deleteClass(String moduleId, String classId);
 	public Mono<ResponseEntity<CustomResponse<ModuleUpdateDto>>> updateModule(String moduleId, ModuleUpdateDto moduleUpdateDto);
+	public Mono<ResponseEntity<CustomResponse<Class>>> updateClass(String moduleId, String classId, Class theClass);
 }
