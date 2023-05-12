@@ -17,6 +17,7 @@ import reactor.core.publisher.Mono;
 
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST, RequestMethod.PUT,RequestMethod.DELETE})
 @RestController
+@RequestMapping("/courses")
 public class CourseController {
 
     @Autowired
