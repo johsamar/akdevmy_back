@@ -32,7 +32,8 @@ import jakarta.validation.Valid;
 import reactor.core.publisher.Mono;
 
 @RestController
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST, RequestMethod.PUT,RequestMethod.DELETE})
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+		RequestMethod.DELETE })
 @RequestMapping("/modules")
 public class ModuleController implements IModuleController {
 
@@ -195,6 +196,28 @@ public class ModuleController implements IModuleController {
 					return Mono.just(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
 
 				});
+	}
+
+	@PatchMapping(value = ApiConstant.UPDATE_CLASS, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public Mono<ResponseEntity<CustomResponse<Class>>> updateClass(@PathVariable String moduleId,
+			@PathVariable String classId, @RequestBody Class theClass) {
+		return this.moduleService.updateClass(moduleId, classId, theClass)
+				.map(r -> ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8")
+						.body(new CustomResponse<Class>(r.getMessage(), r.getData())))
+				.onErrorResume(e -> {
+					CustomResponse<Class> response = new CustomResponse<>();
+					if (e instanceof CustomException) {
+						CustomException exception = (CustomException) e;
+						response.setMessage("Error al actualizar la clase: " + exception.getMessage());
+						return Mono.just(
+								new ResponseEntity<>(response, HttpStatusCode.valueOf(exception.getStatusCode())));
+					}
+
+					return Mono.just(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+
+				});
+
 	}
 
 }
