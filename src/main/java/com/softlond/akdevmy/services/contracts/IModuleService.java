@@ -16,4 +16,5 @@ public interface IModuleService {
 	public Mono<CustomResponse<Module>> addClass(String moduleId, Class theClass);
 	public Mono<CustomResponse<Boolean>> deleteClass(String moduleId, String classId);
 	public Mono<CustomResponse<ModuleUpdateDto>> updateModule(String moduleId, ModuleUpdateDto moduleUpdateDto);
+	public Mono<CustomResponse<Class>> updateClass(String moduleId, String classId, Class theClass);
 }

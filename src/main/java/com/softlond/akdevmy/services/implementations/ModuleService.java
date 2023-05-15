@@ -226,4 +226,41 @@ public class ModuleService implements IModuleService {
 
 	}
 
+	@Override
+	public Mono<CustomResponse<Class>> updateClass(String moduleId, String classId, Class theClass) {
+
+		return this.moduleRepository.findById(moduleId).flatMap(module -> {
+			List<Class> classes = module.getClasses();
+			return Flux.fromIterable(classes).filter(c -> c.get_id().equals(classId)).next().flatMap(clazz -> {
+				clazz.setName(theClass.getName());
+				clazz.setType(theClass.getType());
+				clazz.setDescription(theClass.getDescription());
+				clazz.setDuration(theClass.getDuration());
+				clazz.setUrl(theClass.getUrl());
+				clazz.setImage(theClass.getImage());
+				clazz.setVideo(theClass.getVideo());
+				clazz.setAudio(theClass.getAudio());
+				clazz.setArticle(theClass.getArticle());
+				clazz.setDocument(theClass.getDocument());
+
+				return moduleRepository.save(module)
+						.thenReturn(new CustomResponse<>("Clase actualizada exitosamente", clazz));
+
+			}).switchIfEmpty(Mono.error(new CustomException("La clase no existe en el módulo indicado", null)));
+		}).switchIfEmpty(Mono.error(new CustomException("El módulo no existe", null))).onErrorResume(e -> {
+			CustomException customException = new CustomException(
+					"la clase pudo ser actualizada por un error desconocido", e, 500);
+
+			if (e instanceof CustomException) {
+				customException = new CustomException(e.getMessage(), e, 400);
+			}
+
+			if (e instanceof IllegalArgumentException) {
+				customException = new CustomException("El id del modulo fue recibido como null", e, 400);
+			}
+			return Mono.error(customException);
+		});
+
+	}
+
 }

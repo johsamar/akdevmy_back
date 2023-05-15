@@ -698,3 +698,72 @@ Example of response when required data is not sent in body request(name and desc
 }
 
 ```
+
+
+
+**Update a class **
+
+Verb: PATCH
+
+Endpoint → akdevmybacktest-gierestrepove.b4a.run/api/modules/{moduleId}/class/{classId}
+
+Request example: akdevmybacktest-gierestrepove.b4a.run/api/modules/645aaeb04b511c5d20b66698/class/645e6994c8385508904abb61
+
+```
+
+		{
+			"type": "Type aaaaaaaaaaaaaaaaaaa",
+			"name": "name aaaaaaaaaaa",
+			"description": "Update description  aaaaaaaaaaaaaa",
+			"duration": 28,
+			"url": "aaaaaaa",
+			"image": "aaaaaaaa",
+			"video": "aaaaaaaa",
+			"audio": "aaaaaaaaaa",
+			"article": "aaaaaaa",
+			"document": "bbbbbbbb"
+		}
+
+```
+
+Successful response example.Status 200:
+
+
+```
+{
+	"message": "Clase actualizada exitosamente",
+	"data": {
+		"_id": "645e6994c8385508904abb61",
+		"type": "Type aaaaaaaaaaaaaaaaaaa",
+		"name": "name aaaaaaaaaaa",
+		"description": "Update description  aaaaaaaaaaaaaa",
+		"duration": 28,
+		"url": "aaaaaaa",
+		"image": "aaaaaaaa",
+		"video": "aaaaaaaa",
+		"audio": "aaaaaaaaaa",
+		"article": "aaaaaaa",
+		"document": "bbbbbbbb",
+		"position": 28
+	}
+}
+
+```
+
+Example of response when no module is found. Status 400:
+
+``` 
+{
+	"message": "Error al actualizar la clase: El módulo no existe",
+	"data": null
+}
+```
+
+Example of response when no class is found. Status 400:
+
+``` 
+{
+	"message": "Error al actualizar la clase: La clase no existe en el módulo indicado",
+	"data": null
+}
+```

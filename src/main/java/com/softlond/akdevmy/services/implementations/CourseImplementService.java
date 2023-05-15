@@ -1,6 +1,7 @@
 package com.softlond.akdevmy.services.implementations;
 
-import com.softlond.akdevmy.Exception.CustomException;
+
+import com.softlond.akdevmy.exceptions.CustomException;
 import com.softlond.akdevmy.models.Course;
 import com.softlond.akdevmy.repositories.contracts.CourseRepository;
 import com.softlond.akdevmy.services.contracts.CourseService;
