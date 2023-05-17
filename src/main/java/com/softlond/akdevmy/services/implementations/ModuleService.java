@@ -1,13 +1,17 @@
 package com.softlond.akdevmy.services.implementations;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
+import com.softlond.akdevmy.dtos.ClassPositionDto;
 import com.softlond.akdevmy.dtos.ModuleUpdateDto;
 import com.softlond.akdevmy.exceptions.CustomException;
 import com.softlond.akdevmy.models.Class;
@@ -272,6 +276,51 @@ public class ModuleService implements IModuleService {
 			return Mono.error(customException);
 		});
 
+	}
+
+	@Override
+	public Mono<CustomResponse<List<Class>>> classesRepositioning(String moduleId,
+			List<ClassPositionDto> classPositionDtos) {
+
+		return this.moduleRepository.findById(moduleId).flatMap(module -> {
+			CustomResponse<List<Class>> response = new CustomResponse<>();
+
+			for (ClassPositionDto classDto : classPositionDtos) {
+				Optional<Class> optionalClass = module.getClasses().stream()
+						.filter(c -> c.get_id().equals(classDto.get_id())).findFirst();
+
+				if (optionalClass.isPresent()) {
+					Class findClass = optionalClass.get();
+					findClass.setPosition(classDto.getPosition());
+				}
+
+			}
+
+			return this.moduleRepository.save(module).flatMap(ms -> {
+
+				return this.moduleRepository.findById(ms.get_id()).map(mf -> {
+
+					response.setMessage("Clases reordenadas con éxito");
+					response.setData(mf.getClasses());
+					return response;
+
+				});
+
+			});
+
+		}).switchIfEmpty(Mono.error(new CustomException("El módulo no existe", null))).onErrorResume(e -> {
+			CustomException customException = new CustomException(
+					"las clases no pudieron ser reordenadas por un error desconocido", e, 500);
+
+			if (e instanceof CustomException) {
+				customException = new CustomException(e.getMessage(), e, 400);
+			}
+
+			if (e instanceof IllegalArgumentException) {
+				customException = new CustomException("El id del modulo fue recibido como null", e, 400);
+			}
+			return Mono.error(customException);
+		});
 	}
 
 }

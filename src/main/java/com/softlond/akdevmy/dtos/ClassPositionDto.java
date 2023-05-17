@@ -7,27 +7,27 @@ public class ClassPositionDto {
 	@NotBlank(message = "required")
 	private String _id;
 	@NotBlank(message = "required")
-	private String position;
+	private Integer position;
 
-	public ClassPositionDto(String _id, String position) {
+	public ClassPositionDto(String _id, Integer position) {
 		super();
 		this._id = _id;
 		this.position = position;
 	}
 
-	public String getName() {
+	public String get_id() {
 		return _id;
 	}
 
-	public void setName(String _id) {
+	public void set_id(String _id) {
 		this._id = _id;
 	}
 
-	public String getDescription() {
+	public Integer getPosition() {
 		return position;
 	}
 
-	public void setDescription(String position) {
+	public void setPosition(Integer position) {
 		this.position = position;
 	}
 

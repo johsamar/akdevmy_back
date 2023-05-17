@@ -226,7 +226,11 @@ public class ModuleController implements IModuleController {
 	public Mono<ResponseEntity<CustomResponse<List<Class>>>> classesRepositioning(@PathVariable String moduleId,
 		 @RequestBody List<ClassPositionDto> classPositionDtos) {
 		
-		return null;
+		return this.moduleService.classesRepositioning(moduleId, classPositionDtos).map(r -> ResponseEntity
+				.ok()
+				.header("Content-Type", "application/json; charset=UTF-8")
+				.body(new CustomResponse<List<Class>>(r.getMessage(), r.getData()))
+				);
 	}
 
 }
