@@ -1,11 +1,11 @@
 package com.softlond.akdevmy.services.implementations;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.softlond.akdevmy.dtos.ModuleUpdateDto;
@@ -70,6 +70,7 @@ public class ModuleService implements IModuleService {
 		return modules.collectList().map(moduleList -> {
 			return new CustomResponse<List<Module>>("Módulos obtenidos con éxito", moduleList);
 		}).onErrorResume(e -> {
+			System.out.println("ERROR SERVICE LAYER → " + e);
 			CustomException customException = new CustomException(
 					"Los módulos no pudieron ser obtenidos por un error desconocido", e, 500);
 			/*
@@ -97,6 +98,7 @@ public class ModuleService implements IModuleService {
 				}).switchIfEmpty(Mono.error(new CustomException("El módulo con el id indicado no existe", null, 400))
 
 				).onErrorResume(e -> {
+					System.out.println("ERROR SERVICE LAYER → " + e);
 					CustomException customException = new CustomException(
 							"El modulo no pudo ser obtenido por un error desconocido", e, 500);
 
@@ -152,6 +154,15 @@ public class ModuleService implements IModuleService {
 	public Mono<CustomResponse<Module>> addClass(String moduleId, Class theClass) {
 		return this.moduleRepository.findById(moduleId).flatMap(m -> {
 			List<Class> classes = m.getClasses();
+
+			int position = 0;
+			if (classes.size() > 0) {
+				Class lastClass = classes.get(classes.size() - 1);
+				position = lastClass.getPosition() + 1;
+			}
+
+			theClass.setPosition(position);
+
 			classes.add(theClass);
 			m.setClasses(classes);
 			return this.moduleRepository.save(m);

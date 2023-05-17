@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.softlond.akdevmy.constant.ApiConstant;
 import com.softlond.akdevmy.controllers.contracts.IModuleController;
+import com.softlond.akdevmy.dtos.ClassPositionDto;
 import com.softlond.akdevmy.dtos.ModuleUpdateDto;
 import com.softlond.akdevmy.exceptions.CustomException;
 import com.softlond.akdevmy.models.Class;
@@ -32,7 +33,7 @@ import jakarta.validation.Valid;
 import reactor.core.publisher.Mono;
 
 @RestController
-@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH,
 		RequestMethod.DELETE })
 @RequestMapping("/modules")
 public class ModuleController implements IModuleController {
@@ -218,6 +219,14 @@ public class ModuleController implements IModuleController {
 
 				});
 
+	}
+
+	@PatchMapping(value = ApiConstant.REPOSITIONING_CLASS, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	public Mono<ResponseEntity<CustomResponse<List<Class>>>> classesRepositioning(@PathVariable String moduleId,
+		 @RequestBody List<ClassPositionDto> classPositionDtos) {
+		
+		return null;
 	}
 
 }

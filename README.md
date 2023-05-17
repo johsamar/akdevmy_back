@@ -513,8 +513,7 @@ Request example: akdevmybacktest-gierestrepove.b4a.run/api/modules/644f0abd6e9d5
 			"video": "",
 			"audio": "",
 			"article": "",
-			"document": "",
-			"position": 9
+			"document": ""
 		}
 ```
 
@@ -569,7 +568,7 @@ Successful response example.Status 200:
 				"audio": null,
 				"article": null,
 				"document": "",
-				"position": 2
+				"position": 3
 			},
 			{
 				"_id": "645bcdcb7da47f419bb833b8",
