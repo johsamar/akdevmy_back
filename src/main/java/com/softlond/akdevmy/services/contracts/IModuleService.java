@@ -2,6 +2,7 @@ package com.softlond.akdevmy.services.contracts;
 
 import java.util.List;
 
+import com.softlond.akdevmy.dtos.ClassPositionDto;
 import com.softlond.akdevmy.dtos.ModuleUpdateDto;
 import com.softlond.akdevmy.models.Class;
 import com.softlond.akdevmy.models.Module;
@@ -17,4 +18,5 @@ public interface IModuleService {
 	public Mono<CustomResponse<Boolean>> deleteClass(String moduleId, String classId);
 	public Mono<CustomResponse<ModuleUpdateDto>> updateModule(String moduleId, ModuleUpdateDto moduleUpdateDto);
 	public Mono<CustomResponse<Class>> updateClass(String moduleId, String classId, Class theClass);
+	public Mono<CustomResponse<List<Class>>> classesRepositioning(String moduleId, List<ClassPositionDto> classPositionDtos);
 }
